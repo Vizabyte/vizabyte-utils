@@ -33,18 +33,6 @@ import org.docx4j.openpackaging.parts.WordprocessingML.MainDocumentPart;
 
 public class DocxUtils {
 	
-	public static void main(String[] args) throws Exception {
-
-		// Input docx has variables in it: ${colour}, ${icecream}
-		String inputfilepath = "/Users/vikas/Downloads/demo.docx";
-		
-		HashMap<String, String> mappings = new HashMap<String, String>();
-		mappings.put("colour", "green");
-		mappings.put("icecream", "chocolate");
-		
-		DocxUtils.replaceVariables(new java.io.File(inputfilepath), mappings);
-	}
-
 	/**
 	 * Replaces variables represented as ${variable-name} inside an input file
 	 * in the .docx file format to the corresponding values specified by the
