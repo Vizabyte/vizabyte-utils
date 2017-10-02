@@ -46,9 +46,9 @@ public class DocxUtils {
 	}
 
 	/**
-	 * Replaces variables inside an input file in the .docx file format to the
-	 * corresponding values specified by the variables names as the key in the
-	 * input map.
+	 * Replaces variables represented as ${variable-name} inside an input file
+	 * in the .docx file format to the corresponding values specified by the
+	 * variables names as the key in the input map.
 	 * 
 	 * @param documentPart
 	 *            - the result of the variable replacement
@@ -71,9 +71,10 @@ public class DocxUtils {
 	}
 	
 	/**
-	 * Replaces variables inside an input file in the .docx file format to the
-	 * corresponding values specified by the variables names as the key in the
-	 * input map and replaces the contents of the original file with the result.
+	 * Replaces variables represented as ${variable-name} inside an input file
+	 * in the .docx file format to the corresponding values specified by the
+	 * variables names as the key in the input map and replaces the contents of
+	 * the original file with the result.
 	 * 
 	 * @param docxFile
 	 *            - input file in the .docx format
@@ -107,10 +108,10 @@ public class DocxUtils {
 	}
 
 	/**
-	 * Replaces variables inside an input file in the .docx file format to the
-	 * corresponding values specified by the variables names as the key in the
-	 * input map and saves the result in the file location specified by the
-	 * outFile.
+	 * Replaces variables represented as ${variable-name} inside an input file
+	 * in the .docx file format to the corresponding values specified by the
+	 * variables names as the key in the input map and saves the result in the
+	 * file location specified by the outFile.
 	 * 
 	 * @param docxFile
 	 *            - input file in the .docx format
