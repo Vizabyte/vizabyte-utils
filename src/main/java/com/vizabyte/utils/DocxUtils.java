@@ -19,9 +19,10 @@
  */
 package com.vizabyte.utils;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
+import java.io.InputStream;
 import java.util.Map;
 
 import javax.xml.bind.JAXBException;
@@ -42,7 +43,7 @@ public class DocxUtils {
 	 *            - the result of the variable replacement
 	 * @param mappings
 	 *            - the variable - value mappings
-	 * @return
+	 * @return - the result as a MainDocumentPart
 	 * @throws JAXBException
 	 *             - when errors are encountered while replacing variables in
 	 *             the input file
@@ -68,6 +69,7 @@ public class DocxUtils {
 	 *            - input file in the .docx format
 	 * @param mappings
 	 *            - the variable - value mappings
+	 * @return - the result as a file object
 	 * @throws JAXBException
 	 *             - when errors are encountered while replacing variables in
 	 *             the input file
@@ -80,7 +82,7 @@ public class DocxUtils {
 	 *             queries
 	 */
 	@SuppressWarnings("deprecation")
-	public static void replaceVariables(File docxFile, Map<String, String> mappings) throws JAXBException, Docx4JException, IOException{
+	public static File replaceVariables(File docxFile, Map<String, String> mappings) throws JAXBException, Docx4JException, IOException{
 		if (docxFile == null || mappings == null){
 			throw new NullPointerException();
 		}
@@ -93,6 +95,7 @@ public class DocxUtils {
 		
 		SaveToZipFile saver = new SaveToZipFile(wordMLPackage);
 		saver.save(docxFile.getCanonicalPath());
+		return docxFile;
 	}
 
 	/**
@@ -107,6 +110,7 @@ public class DocxUtils {
 	 *            - the variable - value mappings
 	 * @param outFile
 	 *            - output file
+	 * @return - the output file
 	 * @throws JAXBException
 	 *             - when errors are encountered while replacing variables in
 	 *             the input file
@@ -115,7 +119,7 @@ public class DocxUtils {
 	 *             file
 	 */
 	@SuppressWarnings("deprecation")
-	public static void replaceVariables(File docxFile, Map<String, String> mappings, File outFile) throws Docx4JException, JAXBException{
+	public static File replaceVariables(File docxFile, Map<String, String> mappings, File outFile) throws Docx4JException, JAXBException{
 		if (docxFile == null || mappings == null){
 			throw new NullPointerException();
 		}
@@ -128,5 +132,42 @@ public class DocxUtils {
 		
 		SaveToZipFile saver = new SaveToZipFile(wordMLPackage);
 		saver.save(outFile);
+		return outFile;
 	}
+	
+	/**
+	 * Replaces variables represented as ${variable-name} inside an input stream
+	 * on a .docx file to the corresponding values specified by the variables
+	 * names as the key in the input map and returns the result as a byte array.
+	 * 
+	 * @param docxInputStream
+	 *            - input stream on a .docx file
+	 * @param mappings
+	 *            - the variable - value mappings
+	 * @return - the result as a byte array
+	 * @throws JAXBException
+	 *             - when errors are encountered while replacing variables in
+	 *             the input file
+	 * @throws Docx4JException
+	 *             - when errors are encountered while reading the input .docx
+	 *             file
+	 */
+	public static byte[] replaceVariables(InputStream docxInputStream, Map<String, String> mappings) throws JAXBException, Docx4JException, IOException{
+		if (docxInputStream == null || mappings == null){
+			throw new NullPointerException();
+		}
+		
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		
+		WordprocessingMLPackage wordMLPackage = WordprocessingMLPackage
+				.load(docxInputStream);
+		MainDocumentPart documentPart = wordMLPackage.getMainDocumentPart();
+		
+		documentPart.variableReplace(mappings);
+		
+		SaveToZipFile saver = new SaveToZipFile(wordMLPackage);
+		saver.save(baos);
+		return baos.toByteArray();
+	}
+	
 }
