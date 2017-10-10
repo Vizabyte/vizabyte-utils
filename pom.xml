@@ -35,6 +35,14 @@
 				<version>3.8.1</version>
 				<scope>test</scope>
 			</dependency>
+
+			<!-- https://mvnrepository.com/artifact/org.docx4j/docx4j-export-fo -->
+			<dependency>
+				<groupId>org.docx4j</groupId>
+				<artifactId>docx4j-export-fo</artifactId>
+				<version>3.3.0</version>
+			</dependency>
+
 		</dependencies>
 	</dependencyManagement>
 
@@ -47,6 +55,10 @@
 		<dependency>
 			<groupId>org.docx4j</groupId>
 			<artifactId>docx4j</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.docx4j</groupId>
+			<artifactId>docx4j-export-fo</artifactId>
 		</dependency>
 	</dependencies>
 

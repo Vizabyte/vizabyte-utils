@@ -20,13 +20,20 @@
 package com.vizabyte.utils;
 
 import java.io.ByteArrayOutputStream;
+import java.io.Closeable;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Map;
 
 import javax.xml.bind.JAXBException;
 
+import org.docx4j.Docx4J;
+import org.docx4j.convert.out.FOSettings;
 import org.docx4j.openpackaging.exceptions.Docx4JException;
 import org.docx4j.openpackaging.io.SaveToZipFile;
 import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
@@ -170,4 +177,36 @@ public class DocxUtils {
 		return baos.toByteArray();
 	}
 	
+	public static void toPdf(InputStream isDocument, OutputStream pdfStream) throws Docx4JException {
+		WordprocessingMLPackage wordMLPackage = WordprocessingMLPackage.load(isDocument);
+		FOSettings foSettings = Docx4J.createFOSettings();
+		foSettings.setWmlPackage(wordMLPackage);
+		Docx4J.toFO(foSettings, pdfStream, Docx4J.FLAG_EXPORT_PREFER_XSL);
+		
+		// Clean up, so any ObfuscatedFontPart temp files can be deleted
+		if (wordMLPackage.getMainDocumentPart().getFontTablePart() != null) {
+			wordMLPackage.getMainDocumentPart().getFontTablePart().deleteEmbeddedFontTempFiles();
+		}
+	}
+			
+	public static void toPdf(File inputDocxFile, File outputPdfFile) throws FileNotFoundException, Docx4JException{
+		FileInputStream fis = null;
+		FileOutputStream fos = null;
+		try{
+				fis = new FileInputStream(inputDocxFile);
+				fos = new FileOutputStream(outputPdfFile);
+				toPdf(fis, fos);
+		}finally{
+			IOUtils.closeQuietly(fis);
+			IOUtils.closeQuietly(fos);
+		}
+		
+	}
+	
+	public static void toPdf(String docxFilePath, String pdfFilePath) throws FileNotFoundException, Docx4JException{
+		File inputFile = new File(docxFilePath);
+		File outputFile = new File(pdfFilePath);
+		toPdf(inputFile, outputFile);
+	}
+
 }
