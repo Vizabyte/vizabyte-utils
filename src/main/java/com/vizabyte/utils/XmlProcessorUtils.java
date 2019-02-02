@@ -226,23 +226,4 @@ public class XmlProcessorUtils {
 		return domParser.parse(inputStream);
 	}
 
-	public static void main(String[] args) {
-		String xmlPath = "/Users/vikas/work/workspaces/eclipse/indus-ws-utilities/src/inventory.xml";
-		String xpathNum = "count(//computer)";
-		String xpathString = "/inventory/vendor[1]/computer[1]/model";
-		String xpathBoolean = "contains(/inventory/vendor[2], 'Apple')";
-
-		try {
-			Double count = (Double) XmlProcessorUtils.getElementValue(xmlPath, xpathNum, XPathConstants.NUMBER);
-			System.out.println(count);
-
-			String model = (String) XmlProcessorUtils.getElementValue(xmlPath, xpathString, XPathConstants.STRING);
-			System.out.println(model);
-
-			Boolean test = (Boolean) XmlProcessorUtils.getElementValue(xmlPath, xpathBoolean, XPathConstants.BOOLEAN);
-			System.out.println(test);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
 }
